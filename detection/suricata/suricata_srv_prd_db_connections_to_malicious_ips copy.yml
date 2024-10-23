@@ -1,0 +1,24 @@
+title: Suricata SRV-PRD-WEB Detection of Connections to Malicious IPs
+id: 7ef94f8f-061c-4885-a074-d1c424cc6a3c
+status: experimental
+description: Detect connections made by SRV-PRD-WEB (192.168.10.21) to malicious IP addresses.
+author: Antoine Virgos (@avirgos)
+logsource:
+  product: network
+  service: suricata
+detection:
+  selection:
+    src_ip: "192.168.10.21"
+  condition: selection
+  lookup:
+    - dest_ip:
+        from: malicious-ips.csv
+        column: ip
+fields:
+  - dest_ip
+  - dest_port
+  - src_ip
+  - count
+falsepositives:
+  - Unknown
+level: high
