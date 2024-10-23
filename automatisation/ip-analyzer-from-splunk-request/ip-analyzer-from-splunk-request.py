@@ -1,8 +1,9 @@
 import json
 import requests
+import csv
 
 INPUT_JSON_FILE = "example-request-splunk-23-10-2024.json"
-OUTPUT_TXT_FILE = "malicious-ips.txt"
+OUTPUT_CSV_FILE = "malicious-ips.csv"
 API_KEY = '<abuse-ipdb-api-key>'
 
 headers = {
@@ -32,10 +33,11 @@ with open(INPUT_JSON_FILE) as f:
 # extract IP addresses
 ip_list = [entry['result']['dest_ip'] for entry in data]
 
-# read IPs already present in the OUTPUT_TXT_FILE file
+# read IPs already present in the OUTPUT_CSV_FILE file
 try:
-    with open(OUTPUT_TXT_FILE, "r") as f:
-        existing_ips = {line.strip() for line in f}
+    with open(OUTPUT_CSV_FILE, "r") as f:
+        reader = csv.reader(f)
+        existing_ips = {row[0] for row in reader if row}
 except FileNotFoundError:
     existing_ips = set()
 
@@ -58,10 +60,17 @@ for ip in ip_list:
 
 # new potential malicious IP to add
 if malicious_ips:
-    with open(OUTPUT_TXT_FILE, "a") as f:
-        for ip in malicious_ips:
-            f.write(f"{ip}\n")
+    with open(OUTPUT_CSV_FILE, "a", newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
 
-    print(f"\nMalicious IP addresses have been recorded in {OUTPUT_TXT_FILE}.")
+        # if file is empty, add the header
+        if not existing_ips:
+            csv_writer.writerow(["ip"])
+
+        # add new malicious IPs to the CSV file
+        for ip in malicious_ips:
+            csv_writer.writerow([ip])
+
+    print(f"\nMalicious IP addresses have been recorded in {OUTPUT_CSV_FILE}.")
 else:
     print("\nNo new malicious IP addresses to record.")

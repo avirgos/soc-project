@@ -1,5 +1,7 @@
 # ip-analyzer-from-splunk-request
 
+Dépendances :
+
 - AbuseIPDB
 - Splunk Enterprise Security
 
@@ -12,6 +14,12 @@ index="connectix" sourcetype="suricata" earliest=-24h
 | sort - count
 ```
 
+Exécution :
+
 ```py
 python3 ip-analyzer-from-splunk-request.py
 ```
+
+Une fois le fichier ```malicious-ips.csv``` obtenu ou mis à jour, importez ce fichier dans Splunk Enterprise en tant que **lookup table** :
+
+![add-lookup-table](assets/add-lookup-table.png)
