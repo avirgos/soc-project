@@ -2,7 +2,7 @@ import json
 import requests
 import csv
 
-INPUT_JSON_FILE = "example-request-splunk-23-10-2024.json"
+INPUT_JSON_FILE = "example-request-splunk-27-10-2024.json"
 OUTPUT_CSV_FILE = "malicious-ips.csv"
 API_KEY = '<abuse-ipdb-api-key>'
 
@@ -22,9 +22,9 @@ def check_ip(ip):
     data = response.json()
 
     if 'data' in data:
-        return data['data']['abuseConfidenceScore'], data['data']['totalReports']
+        return data['data']['abuseConfidenceScore'], data['data']['totalReports'], data['data']['domain']
     else:
-        return None, None
+        return None, None, None
 
 # read INPUT_JSON_FILE
 with open(INPUT_JSON_FILE) as f:
@@ -45,18 +45,22 @@ except FileNotFoundError:
 malicious_ips = []
 
 for ip in ip_list:
-    score, reports = check_ip(ip)
+    score, reports, domain = check_ip(ip)
 
-    if score is not None:
-        print(f"IP : {ip} | Score : {score}% | Reports : {reports}")
+    # skip IPs with domain name "microsoft.com"
+    if domain and "microsoft.com" not in domain:
+        if score is not None:
+            print(f"IP : {ip} | Score : {score}% | Reports : {reports} | Domain: {domain}")
 
-        if score > 0:
-            print(f"⚠️  The IP address {ip} is malicious !")
+            if score > 0:
+                print(f"⚠️  The IP address {ip} is malicious!")
 
-            if ip not in existing_ips:
-                malicious_ips.append(ip)
+                if ip not in existing_ips:
+                    malicious_ips.append(ip)
+        else:
+            print(f"IP : {ip} | No data available.")
     else:
-        print(f"IP : {ip} | No data available.")
+        print(f"Skipping IP : {ip} as it is associated with 'microsoft.com'.")
 
 # new potential malicious IP to add
 if malicious_ips:
