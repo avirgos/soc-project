@@ -1,0 +1,23 @@
+title: Excessive RDP Logins in a Single Day
+id: a1b2c3d4-e5f6-7890-abcd-1234567890ab
+description: Detects more than 100 successful RDP login events within a single day for a specific account.
+status: experimental
+author: smakalou
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID:
+            - 4778   # Successful login
+            - 4779   # Failed login
+    condition: selection | count(AccountName) by AccountName > 100
+fields:
+    - AccountName
+    - ComputerName
+    - EventID
+level: high
+tags:
+    - attack.persistence
+    - attack.T1078
+    - attack.privilege_escalation
