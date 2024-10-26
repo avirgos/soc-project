@@ -28,3 +28,12 @@ fields:
   - src_port
   - dest_ip
   - dest_port
+tags:
+  - attack.initial_access
+  - attack.exfiltration
+  - attack.persistence
+  - attack.C2
+  - attack.T1071.001
+  - attack.T1071.004 
+  - attack.T1071      
+  - attack.T1105      

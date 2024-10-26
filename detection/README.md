@@ -1,3 +1,3 @@
 # detection
 
-Vous trouverez ici l'ensemble des règles Splunk et Suricata.
+Vous trouverez ici l'ensemble des règles utilisées dans Splunk.
