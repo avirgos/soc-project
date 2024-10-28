@@ -13,7 +13,7 @@ pip install ansible
 
 ⚠️ Dans le playbook ```auto_splunk_query.yml``` vous devez compléter les valeur des variables ```username``` et ```password``` concernant votre compte Splunk. ⚠️
 
-- Exécution du playbook Ansible 
+- Exécution du playbook Ansible :
 
 ```bash
 ansible-playbook auto_splunk_query.yml
