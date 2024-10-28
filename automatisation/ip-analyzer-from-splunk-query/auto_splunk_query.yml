@@ -1,0 +1,46 @@
+---
+- name: Automatiser la requête Splunk et télécharger les résultats en JSON
+  hosts: localhost
+  gather_facts: yes
+  vars:
+    splunk_host: "https://172.10.80.212:8089"
+    username: "<username>"
+    password: "<password>"
+    query: 'search index="connectix" sourcetype="suricata" earliest=-24h | stats count by dest_ip, dest_port | where NOT cidrmatch("192.168.10.0/24", dest_ip) | sort - count'
+    output_file: "./queries/splunk-query-{{ ansible_date_time.date }}.json"
+
+  tasks:
+    - name: Lancer la recherche Splunk.
+      uri:
+        url: "{{ splunk_host }}/services/search/jobs"
+        method: POST
+        user: "{{ username }}"
+        password: "{{ password }}"
+        force_basic_auth: yes
+        body_format: form-urlencoded
+        headers:
+          Content-Type: "application/x-www-form-urlencoded"
+        body:
+          search: "{{ query }}"
+          output_mode: "json"
+          exec_mode: "blocking"
+        return_content: yes
+        validate_certs: no
+        status_code: 201
+      register: search_job
+
+    - name: Récupérer les résultats de la recherche Splunk.
+      uri:
+        url: "{{ splunk_host }}/services/search/jobs/{{ search_job.json.sid }}/results?output_mode=json"
+        method: GET
+        user: "{{ username }}"
+        password: "{{ password }}"
+        force_basic_auth: yes
+        return_content: yes
+        validate_certs: no
+      register: search_results
+
+    - name: Enregistrer les résultats dans un fichier JSON.
+      copy:
+        content: "{{ search_results.content }}"
+        dest: "{{ output_file }}"

@@ -1,8 +1,14 @@
 import json
 import requests
 import csv
+import sys
 
-INPUT_JSON_FILE = "example-request-splunk-27-10-2024.json"
+# usage
+if len(sys.argv) != 2:
+    print("Usage: python3 ip-analyzer-from-splunk-query.py queries/<splunk-query-json-file>")
+    sys.exit(1)
+
+INPUT_JSON_FILE = sys.argv[1]
 OUTPUT_CSV_FILE = "malicious-ips.csv"
 API_KEY = '<abuse-ipdb-api-key>'
 
@@ -28,10 +34,10 @@ def check_ip(ip):
 
 # read INPUT_JSON_FILE
 with open(INPUT_JSON_FILE) as f:
-    data = [json.loads(line) for line in f]
+    data = json.load(f)  # Change here to load as a dictionary
 
 # extract IP addresses
-ip_list = [entry['result']['dest_ip'] for entry in data]
+ip_list = [entry['dest_ip'] for entry in data['results']]  # Change here to access the correct key
 
 # read IPs already present in the OUTPUT_CSV_FILE file
 try:
