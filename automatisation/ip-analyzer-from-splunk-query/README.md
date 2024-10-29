@@ -25,16 +25,6 @@ Exécutez ```run-ip-analyzer-from-splunk-query.sh``` :
 ./run-ip-analyzer-from-splunk-query.sh
 ```
 
-## Automatisation
-
-Via le ```cronjob``` suivant (tous les jours à minuit) :
-
-```
-0 0 * * * <path-to-soc-project>/automatisation/ip-analyzer-from-splunk-query/run-ip-analyzer-from-splunk-query.sh
-```
-
-**⚠️ Dans le ```cronjob```,  compléter la variable ```<path-to-soc-project>``` pour correspondre à l'emplacement où se trouve le répertoire ```soc-project```. ⚠️**
-
 ## Ajouter/modifier ```malicious-ips.csv``` dans Splunk
 
 Une fois le fichier ```malicious-ips.csv``` obtenu, importez ce fichier dans Splunk Enterprise en tant que **lookup table** :
