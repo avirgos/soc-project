@@ -1,0 +1,21 @@
+title: Special Logon Event Detection
+id: b09a02fb-d2a1-4b0e-8fa2-7a9a9a1b7c51
+description: Detects logon events where an account with special privileges logs in on Windows systems (Event ID 4672).
+status: experimental
+author: smakalou
+date: 2024-10-23
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4672
+  condition: selection
+fields:
+  - EventID
+  - Account_Name
+  - ComputerName
+  - Privileges
+falsepositives:
+  - Administrative actions by legitimate users
+level: medium
