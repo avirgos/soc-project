@@ -1,0 +1,25 @@
+title: Group Membership Changes
+id: a1b2c3d4-5678-9101-1121-314159265359
+status: experimental
+description: Detects changes in group membership on Windows servers (additions and deletions)
+author: smakalou
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID:
+      - 4728  # A member was added to a global security group
+      - 4729  # A member was removed from a global security group
+      - 4732  # A member was added to a global distribution group
+      - 4733  # A member was removed from a global distribution group
+      - 4756  # A member was added to a universal security group
+      - 4757  # A member was removed from a universal security group
+  condition: selection
+fields:
+  - EventID
+  - Account_Name
+  - Group_Name
+  - ComputerName
+  - _time
+level: medium
