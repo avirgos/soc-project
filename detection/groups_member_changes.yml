@@ -15,6 +15,11 @@ detection:
       - 4733  # A member was removed from a global distribution group
       - 4756  # A member was added to a universal security group
       - 4757  # A member was removed from a universal security group
+    src_ip:
+      - "192.168.10.10"
+      - "192.168.10.21"
+      - "192.168.10.22"
+      - "192.168.10.23"
   condition: selection
 fields:
   - EventID

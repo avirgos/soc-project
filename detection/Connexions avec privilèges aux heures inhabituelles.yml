@@ -1,0 +1,31 @@
+title: Special Logon from Specific IPs Outside Business Hours
+id: d4c1d2f5-3f5e-4a8c-9d58-4f7c7e4a51b2
+description: Detects special logon events (Event ID 4672) from specific IP addresses outside standard business hours (7 AM - 7 PM).
+status: experimental
+author: smakalou
+date: 2024-11-01
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4672
+    src_ip:
+      - "192.168.10.10"
+      - "192.168.10.21"
+      - "192.168.10.22"
+      - "192.168.10.23"
+  filter_time:
+    TimeGenerated|hour:
+      - "<07"
+      - ">19"
+  condition: selection and filter_time
+fields:
+  - EventID
+  - Account_Name
+  - ComputerName
+  - src_ip
+  - TimeGenerated
+falsepositives:
+  - Legitimate administrative tasks performed by authorized personnel outside regular hours
+level: high

@@ -1,0 +1,35 @@
+title: Multiple Account Creation or Deletion from Specific IPs
+id: e9b2c3d7-4a6d-4c8a-925b-1f2f3e4a8b9c
+description: Detects three or more account creation (Event ID 4720) or deletion (Event ID 4726) events from specific IP addresses within a short period.
+status: experimental
+author: smakalou
+date: 2024-10-23
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID:
+      - 4720
+      - 4726
+    src_ip:
+      - "192.168.10.10"
+      - "192.168.10.21"
+      - "192.168.10.22"
+      - "192.168.10.23"
+  condition: selection
+  timeframe: 1h  # Exemple de délai d'agrégation
+  aggregation:
+    - Account_Name
+  count: 3
+fields:
+  - EventID
+  - Account_Name
+  - src_ip
+  - _time
+falsepositives:
+  - Routine administrative actions involving account creation or deletion
+level: high
+tags:
+  - attack.persistence
+  - attack.privilege_escalation
