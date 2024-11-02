@@ -3,6 +3,16 @@ id: 5f371cbb-3c25-440c-9520-4e61bfbc5274
 status: experimental
 description: Detect connections made by SRV-PRD-... (-DC, -WEB, -DB, -SHARE) to malicious IP addresses.
 author: Antoine Virgos (@avirgos)
+date: 2024-10-26
+tags:
+  - attack.initial_access
+  - attack.exfiltration
+  - attack.persistence
+  - attack.C2
+  - attack.T1071.001
+  - attack.T1071.004 
+  - attack.T1071      
+  - attack.T1105  
 logsource:
   product: suricata
   service: network
@@ -28,12 +38,6 @@ fields:
   - src_port
   - dest_ip
   - dest_port
-tags:
-  - attack.initial_access
-  - attack.exfiltration
-  - attack.persistence
-  - attack.C2
-  - attack.T1071.001
-  - attack.T1071.004 
-  - attack.T1071      
-  - attack.T1105      
+falsepositives:
+  - Unknown
+level: high
