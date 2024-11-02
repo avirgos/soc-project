@@ -10,9 +10,9 @@ tags:
   - attack.persistence
   - attack.C2
   - attack.T1071.001
-  - attack.T1071.004 
-  - attack.T1071      
-  - attack.T1105  
+  - attack.T1071.004
+  - attack.T1071
+  - attack.T1105
 logsource:
   product: suricata
   service: network
@@ -28,6 +28,9 @@ detection:
       field: ip
       output: dest_ip
   condition: selection
+  exclusion:
+    - dest_ip: "93.184.221.240"
+      flowbits: "ET.INFO.WindowsUpdate"
   groupby:
     - src_ip
     - src_port
