@@ -1,0 +1,33 @@
+title: Creation of Executable Files in Sensitive Directories
+id: f65b118d-94c6-431a-8cd1-9069a8df1dda
+status: experimental
+description: Detects the creation of executable (.exe) files in sensitive directories.
+author: Antoine Virgos (@avirgos)
+date: 2024-11-02
+tags:
+  - attack.execution
+  - attack.persistence
+  - attack.malicious_file
+  - attack.T1203              # Exploitation of client-side applications
+  - attack.T1059              # Command-Line Interface usage for executing commands
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 11
+    TargetFilename:
+      - "*\\System32\\*.exe"
+      - "*\\SysWOW64\\*.exe"
+  condition: selection
+  groupby:
+    - TargetFilename
+    - User
+    - ProcessId
+fields:
+  - TargetFilename
+  - User
+  - ProcessId
+falsepositives:
+  - Unknown
+level: high

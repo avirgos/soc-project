@@ -1,7 +1,7 @@
-title: Suricata SRV-PRD-... Detection of Connections to Malicious IPs
+title: SRV-PRD-... Detection of Connections to Malicious IPs
 id: 5f371cbb-3c25-440c-9520-4e61bfbc5274
 status: experimental
-description: Detect connections made by SRV-PRD-... (-DC, -WEB, -DB, -SHARE) to malicious IP addresses.
+description: Detects connections made by SRV-PRD-... (-DC, -WEB, -DB, -SHARE) to malicious IP addresses.
 author: Antoine Virgos (@avirgos)
 date: 2024-10-26
 tags:
@@ -9,10 +9,10 @@ tags:
   - attack.exfiltration
   - attack.persistence
   - attack.C2
-  - attack.T1071.001
-  - attack.T1071.004
-  - attack.T1071
-  - attack.T1105
+  - attack.T1071.001        # Web Protocols
+  - attack.T1071.004        # DNS
+  - attack.T1071            # General C2 communication techniques
+  - attack.T1105            # Transfer of tools from the adversary to a compromised environment
 logsource:
   product: suricata
   service: network
