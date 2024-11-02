@@ -17,8 +17,8 @@ detection:
   selection:
     EventID: 1
     Image|contains:
-      - '\AppData\'
       - '\Temp\'
+      - '\AppData\'
   condition: selection
 fields:
   - Image
