@@ -1,12 +1,16 @@
 #!/bin/bash
 
 PATH_TO_SOC_PROJECT="/home/antoine/Projets/soc-project"
+SPLUNK_QUERIES_DIR="queries"
 
 # navigate to the directory containing the script and virtual environment
 cd "${PATH_TO_SOC_PROJECT}"/automatisation/ip-analyzer-from-splunk-query 
 
 # activate the Ansible virtual environment
 source ansible-env/bin/activate
+
+# create queries/ directory
+mkdir -p "${SPLUNK_QUERIES_DIR}"
 
 # run the Ansible playbook to query Splunk and generate the result file
 ansible-playbook auto_splunk_query.yml 
