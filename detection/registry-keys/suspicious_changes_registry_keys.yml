@@ -1,0 +1,24 @@
+title: Suspicious changes to Registry Keys
+id: 884af640-8646-4085-b3fe-fb7e79121406
+status: experimental
+description: Detects more than 5 unauthorized/suspicious modifications to registry keys.
+author: Antoine Virgos (@avirgos)
+date: 2024-11-07
+tags:
+  - attack.t1112      # Modify Registry
+logsource:
+    product: windows
+    service: security
+detection:
+  selection:
+    EventID:
+      - 4657
+      - 4656
+  condition: selection | count() > 5
+fields:
+  - ObjectName
+  - Operation
+  - User
+falsepositives:
+  - Unknown
+level: high

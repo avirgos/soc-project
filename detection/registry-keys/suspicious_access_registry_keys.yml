@@ -1,0 +1,26 @@
+title: Suspicious Access to Registry Keys
+id: c7a94564-50ac-48ac-8cd5-030fd6112a98
+status: experimental
+description: Detects more than 3 unauthorised/suspicious accesses to registry keys. 
+author: Antoine Virgos (@avirgos)
+date: 2024-11-07
+tags:
+    - attack.access
+    - attack.t1070.001    # Indicator Removal on Host
+logsource:
+    product: windows
+    service: security
+detection:
+  selection:
+    EventID: 4663
+    ObjectType: Key
+    AccessMask:
+      - '0x1'  # Read Access
+      - '0x2'  # Write Access
+  condition: selection | count() > 3
+fields:
+  - ObjectName
+  - User
+falsepositives:
+  - Unknown
+level: high
