@@ -1,0 +1,28 @@
+title: Suspicious Changes to Sensitive Registry Keys
+id: 884af640-8646-4085-b3fe-fb7e79121406
+status: experimental
+description: Detects more than 3 unauthorized/suspicious modifications to sensitive registry keys.
+author: Antoine Virgos (@avirgos)
+date: 2024-11-07
+tags:
+  - attack.t1112      # Modify Registry
+logsource:
+    product: windows
+    service: security
+detection:
+  selection:
+    EventID:
+      - 4657
+    ObjectName:
+    - "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa"     # Local security parameters
+    - "HKLM\\SAM\\SAM\\Domains\\Account\\Users"           # Information on user accounts
+    - "HKLM\\SECURITY\\Policy\\Secrets"                   # Sensitive system secrets
+    - "HKLM\\SYSTEM\\CurrentControlSet\\Services"         # System services
+  condition: selection | count() > 3
+fields:
+  - ObjectName
+  - Operation
+  - User
+falsepositives:
+  - Unknown
+level: high
