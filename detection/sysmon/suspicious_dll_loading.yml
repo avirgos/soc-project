@@ -1,0 +1,24 @@
+title: Suspicious DLL Loading Activity
+id: 992ae05c-615d-4f2f-9c72-29478d49d3a9
+status: experimental
+description:  Detects cases where the same process loads more than 3 ".dll" files.
+author: Antoine Virgos (@avirgos)
+date: 2024-11-09
+tags:
+  - attack.execution
+  - attack.t1055        # Process Injection
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 7
+    TargetFilename|endswith: '.dll'
+  condition: selection | count() by Image, TargetFilename, User > 3
+fields:
+  - Image
+  - TargetFilename
+  - User
+falsepositives:
+  - Legitimate applications that load DLLs multiple times
+level: medium
