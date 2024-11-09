@@ -5,12 +5,12 @@ import sys
 
 # usage
 if len(sys.argv) != 2:
-    print("Usage: python3 ip-analyzer-from-splunk-query.py queries/<splunk-query-json-file>")
+    print("Usage: python3 ip_analyzer_from_splunk_query.py queries/<splunk-query-json-file>")
     sys.exit(1)
 
 INPUT_JSON_FILE = sys.argv[1]
 OUTPUT_CSV_FILE = "malicious-ips.csv"
-API_KEY = '<abuse-ipdb-api-key>'
+API_KEY = "<abuse-ipdb-api-key>"
 
 headers = {
     'Key': API_KEY,
