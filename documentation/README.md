@@ -20,10 +20,10 @@
 | **Type d'incident**         | **Niveau 1**                | **Niveau 2**                 | **Niveau 3**               | **Canal de communication**             |
 |-----------------------------|-----------------------------|-----------------------------|---------------------------|---------------------------------------|
 | Incident mineur            | Rayane BENDAHMANE           | Shérif MAKALOU              | Antoine VIRGOS            | E-mail, Teams                         |
-| Incident modéré            | Shérif MAKALOU              | Ayet MERZOUQI               | Philémon ST-JEAN          | Teams, Slack                          |
-| Incident critique          | Rayane BENDAHMANE           | Philémon ST-JEAN            | Antoine VIRGOS            | Téléphone, E-mail (urgent)            |
-| Panne système (service Splunk) | Ayet MERZOUQI              | Rayane BENDAHMANE           | Shérif MAKALOU            | Téléphone, E-mail                     |
-| Intrusion détectée         | Philémon ST-JEAN            | Ayet MERZOUQI               | Rayane BENDAHMANE         | Teams, Téléphone (urgence maximale)   |
+| Incident modéré            | Shérif MAKALOU              | Philémon ST-JEAN               | Ayet MERZOUQI          | Teams, Slack                          |
+| Incident critique          | Philémon ST-JEAN           | Rayane BENDAHMANE            | Antoine VIRGOS            | Téléphone, E-mail (urgent)            |
+| Panne système (service Splunk) | Shérif MAKALOU              | Ayet MERZOUQI           | Antoine VIRGOS            | Téléphone, E-mail                     |
+| Intrusion détectée         | Philémon ST-JEAN            | Antoine VIRGOS               | Ayet MERZOUQI         | Teams, Téléphone (urgence maximale)   |
 
 ---
 
@@ -33,9 +33,6 @@
 3. **Incident critique** : Affecte les systèmes critiques, nécessitant une réponse immédiate avec notification en temps réel.
 4. **Panne système** : Actions rapides pour rétablir le service avec communication continue.
 5. **Intrusion détectée** : Toute tentative de sécurité doit être signalée immédiatement et les équipes doivent être mobilisées.
-
-Ce tableau assure une gestion claire des incidents et une escalade appropriée pour maintenir la sécurité et la disponibilité des systèmes.
-
 
 ## Infrastructure
 
