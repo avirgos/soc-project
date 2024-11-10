@@ -1,0 +1,48 @@
+title: Anomalie Réseau avec Flux de Données et TTL Anormaux
+id: 73922ff8-3022-11ec-bf5e-acde48001122
+description: |
+    Détecte des connexions réseau présentant un transfert de données élevé, un nombre de paquets élevé, ou des valeurs TTL anormales,
+    ce qui peut indiquer des tentatives d’exfiltration, de reconnaissance ou de spoofing. Vérifie aussi les adresses IP sources et destinations
+    par rapport à une liste d’IP malveillantes.
+status: experimental
+author: Ayet Merzouqi
+date: "2024-11-09"
+logsource:
+  product: network
+  service: suricata
+detection:
+  selection:
+    - netflow.bytes: ">1000000000"
+    - netflow.pkts: ">10000"
+    - netflow.max_ttl: ">128"
+    - netflow.min_ttl: "<64"
+    - netflow.min_ttl: "<32"
+  condition: selection
+  lookup:
+    - malicious-ips.csv
+    - ip: 
+        dest_ip: dest_ip_malicious
+        src_ip: src_ip_malicious
+    action: eval
+  eval:
+    - is_dest_ip_malicious: if (dest_ip_malicious == null, "No", "Yes")
+    - is_src_ip_malicious: if (src_ip_malicious == null, "No", "Yes")
+fields:
+  - src_ip
+  - dest_ip
+  - total_bytes
+  - total_pkts
+  - max_ttl
+  - min_ttl
+  - is_src_ip_malicious
+  - is_dest_ip_malicious
+level: high
+tags:
+  - network
+  - anomaly
+  - potential_exfiltration
+  - reconnaissance
+  - spoofing
+falsepositives:
+  - High-volume network transfers from legitimate sources
+  - Backups or large file transfers within an intranet

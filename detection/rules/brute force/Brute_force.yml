@@ -1,0 +1,23 @@
+title: Multiple Failed Logins
+id: ac4c2f02-1112-4c7f-a8f1-98b5f1e8f5fa
+description: Detects repeated failed login attempts, potentially indicating a brute-force attack.
+status: experimental
+author: Ayet Merzouqi
+date: 2024-11-05
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4625
+    condition: selection | count() > 100
+fields:
+    - host
+    - user
+falsepositives:
+    - Frequent account lockouts due to misconfigured systems or applications
+    - Users forgetting passwords or entering incorrect credentials
+level: high
+tags:
+    - attack.credential_access
+    - attack.t1110.001

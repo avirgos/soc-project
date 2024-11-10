@@ -1,0 +1,34 @@
+title: Tentative d'accès non autorisé aux fichiers de sécurité SAM, SYSTEM, et SECURITY
+id: 123e4567-e89b-12d3-a456-426614174000
+description: Cette alerte détecte les tentatives d'accès non autorisé aux fichiers de sécurité critiques de Windows, tels que SAM, SYSTEM, et SECURITY, dans le répertoire C:\Windows\System32\config.
+author: Ayet Merzouqi
+status: experimental
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4663
+    Process_Name: '*'
+    Object_Name|contains:
+      - '\Windows\System32\config\SAM'
+      - '\Windows\System32\config\SYSTEM'
+      - '\Windows\System32\config\SECURITY'
+  filter:
+    Process_Name: '*dllhost.exe'
+  condition: selection and not filter
+fields:
+  - _time
+  - Process_Name
+  - Object_Name
+  - dest
+  - src_nt_domain
+falsepositives:
+  - Administrateurs système effectuant des opérations de maintenance ou de sauvegarde légitimes
+  - Activités de sécurité interne dans des environnements de test
+level: high
+tags:
+  - attack.credential_access
+  - attack.t1003.002
+  - attack.defense_evasion
+  - attack.t1070.004

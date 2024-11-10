@@ -1,0 +1,37 @@
+title: Tentative de modification des paramètres de sécurité du registre SAM
+id: 73922ff8-3022-11ec-bf5e-acde48001122
+status: experimental
+description: |
+  Cette alerte détecte les tentatives de modification des paramètres critiques du registre Windows liés aux restrictions d'accès à la base de données SAM dans la clé du registre `HKLM\System\CurrentControlSet\Control\Lsa\RestrictRemoteSamEventThrottlingWindow`. Cette clé est utilisée pour contrôler les paramètres de sécurité liés à l'accès distant au SAM, et une modification non autorisée peut indiquer une tentative d'escalade de privilèges.
+references:
+  - https://example.com/reference-to-attack-technique
+author: Ayet Merzouqi
+date: 2024/11/10
+logsource:
+  product: windows
+  service: sysmon
+  category: registry
+detection:
+  selection:
+    EventID: 13
+    TargetObject: 'HKLM\\System\\CurrentControlSet\\Control\\Lsa\\RestrictRemoteSamEventThrottlingWindow'
+  filter_process:
+    Image|endswith: '\dllhost.exe'
+  condition: selection and not filter_process
+fields:
+  - host
+  - ComputerName
+  - User
+  - Image
+  - ProcessGuid
+  - ProcessId
+  - TargetObject
+  - Details
+falsepositives:
+  - Modification légitime de paramètres de registre par les administrateurs système
+  - Scripts d'automatisation de l'administration
+level: high
+tags:
+  - attack.credential_access
+  - attack.t1003.002
+  - attack.defense_evasion

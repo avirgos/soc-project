@@ -1,0 +1,32 @@
+title: Detection of Weak Encryption in Kerberos Tickets
+id: 123e4567-e89b-12d3-a456-426614174000
+description: Detects multiple Kerberos ticket requests using weak encryption types, indicating potential credential abuse attempts.
+status: experimental
+author: Ayet Merzouqi
+date: 2024-11-09
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        Ticket_Encryption_Type:
+            - "0x1"
+            - "0x17"
+            - "0x3"
+    filter_high_count:
+        count: ">10"
+    condition: selection and filter_high_count
+fields:
+    - Account_Name
+    - Client_Address
+    - Ticket_Encryption_Type
+    - src_ip
+falsepositives:
+    - Legitimate administrative or application usage with weak encryption settings.
+level: high
+tags:
+    - attack.t1558.003
+    - attack.t1558
+    - attack.credential_access
+    - attack.privilege_escalation

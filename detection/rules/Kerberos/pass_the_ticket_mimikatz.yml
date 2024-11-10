@@ -1,0 +1,43 @@
+title: Detection of Pass the Ticket Attack with Mimikatz (Kerberos Lateral Movement)
+id: f2a1d0f2-12b4-4b5e-8c10-abcdef123456
+description: Detects the use of Mimikatz to perform Pass the Ticket attacks using Kerberos commands like sekurlsa::tickets and kerberos::ptt.
+author: Ayet Merzouqi
+date: 2024/11/05
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID:
+      - 4769
+      - 4688
+      - 1
+  conditions:
+    process:
+      - Image|contains: 'mimikatz.exe'
+      - CommandLine|contains: 
+          - 'sekurlsa::tickets /export'
+          - 'kerberos::ptt'
+  filter_not_legit_processes:
+    CommandLine|contains:
+      - "*\\AppData\\Local\\*"
+      - "*\\Microsoft\\Edge\\*"
+  condition: selection AND (process AND NOT filter_not_legit_processes)
+fields:
+  - _time
+  - Account_Name
+  - Service_Name
+  - Client_Address
+  - ComputerName
+  - New_Process_Name
+  - Process_Command_Line
+  - process_id
+  - src
+  - dest_nt_host
+  - detection
+falsepositives:
+  - Security testing and audits using Mimikatz
+level: high
+tags:
+  - attack.credential_access.T1558.003
+  - attack.lateral_movement

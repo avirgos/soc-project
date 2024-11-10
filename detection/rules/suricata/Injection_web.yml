@@ -1,0 +1,45 @@
+title: Suspicious SQL Injection Attempt on Web
+id: 2bca6d10-e3b7-41b2-9c5c-632ad3f83272
+description: |
+  This rule detects potential SQL injection attempts by analyzing Suricata logs for long URLs, long user-agent strings, and the presence of common SQL keywords in requests to a specific internal web server (192.168.10.21). It excludes legitimate traffic from trusted sources such as *.windowsupdate.com and *.microsoft.com.
+status: experimental
+author: Ayet Merzouqi
+date: 2024-11-9
+logsource:
+  product: network
+  service: suricata
+detection:
+  selection:
+    dest_ip: '192.168.10.21'
+    dest:
+      - "*"
+  filter_out:
+    - dest: "*.windowsupdate.com"
+    - dest: "*.microsoft.com"
+  conditions:
+    suspicious_url_length: 'url_length > 1024'
+    suspicious_user_agent_length: 'user_agent_length > 200'
+    contains_sql_keywords:
+      - 'select'
+      - 'union'
+      - 'drop'
+      - 'insert'
+      - 'update'
+      - 'delete'
+  detection:
+    condition: selection AND (suspicious_url_length OR suspicious_user_agent_length OR contains_sql_keywords)
+fields:
+  - src_ip
+  - dest_ip
+  - url
+  - user_agent
+  - count
+  - unique_ips
+falsepositives:
+  - Legitimate administrative or testing activities
+  - Bulk data transfers or large file downloads
+level: high
+tags:
+  - attack.credential_access
+  - attack.t1190
+  - network.web
