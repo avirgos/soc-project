@@ -12,9 +12,10 @@ SMTP_PORT = 465
 SENDER_EMAIL = "splunksoc.insacvl@gmail.com"
 SENDER_PASSWORD = "<gmail-app-password>"
 RECIPIENT_EMAILS = [
-    "virodan4@gmail.com",           # Antoine VIRGOS
-    "linkdine08@gmail.com",         # Ayet MERZOUQI
-    "rayanebe570@gmail.com"         # Rayane BENDAHMANE
+    "virodan4@gmail.com",               # Antoine VIRGOS
+    "linkdine08@gmail.com",             # Ayet MERZOUQI
+    "rayanebe570@gmail.com",            # Rayane BENDAHMANE
+    "makaloucherif@gmail.com"           # Shérif MAKALOU
 ]
 
 # Splunk configuration
