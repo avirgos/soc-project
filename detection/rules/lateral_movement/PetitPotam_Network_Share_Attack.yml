@@ -1,0 +1,28 @@
+
+title: PetitPotam Network Share Attack Detection
+id: 4fa785e4-17cb-4dfc-8fc3-3bf0d31a8f76
+description: Detects PetitPotam attack, which uses network share requests to exfiltrate information or escalate privileges.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 5145
+    Share_Name|contains: "\IPC$"
+    Account_Name: "ANONYMOUS LOGON"
+  condition: selection
+fields:
+  - _time
+  - EventCode
+  - Share_Name
+  - Account_Name
+  - Importance
+falsepositives:
+  - Legitimate administrative tasks accessing network shares
+level: high
+tags:
+  - attack.lateral_movement
+  - attack.privilege_escalation

@@ -1,0 +1,29 @@
+
+title: LSASS Dump Attempt Detection
+id: 57a1f1b7-983c-4041-946d-3f601443d627
+description: Detects attempts to dump the LSASS process, a technique commonly used to extract stored passwords from memory.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4656
+    Process_Name|endswith: "lsass.exe"
+    Access_Mask: "0x705"
+    Object_Type: "SAM_DOMAIN"
+  condition: selection
+fields:
+  - _time
+  - Process_Name
+  - EventCode
+  - Access_Mask
+  - Object_Type
+falsepositives:
+  - Legitimate access by security tools or monitoring systems
+level: critical
+tags:
+  - attack.credential_access
+  - attack.defense_evasion

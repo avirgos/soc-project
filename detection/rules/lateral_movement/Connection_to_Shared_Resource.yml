@@ -1,0 +1,28 @@
+
+title: Medium Importance - Connection to Shared Resource
+id: 2a4766ed-de67-4c03-9058-90b943ed03c5
+description: Medium importance detection of connections to shared resources, specifically checking for lsarpc RelativeTargetName.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 5150
+    Share_Name|contains: "\IPC$"
+    Account_Name: "ANONYMOUS LOGON"
+  condition: selection
+fields:
+  - EventID
+  - Share_Name
+  - Account_Name
+  - _time
+  - Importance
+falsepositives:
+  - Legitimate administrative or monitoring activities involving shared resources
+level: medium
+tags:
+  - attack.lateral_movement
+  - attack.credential_access

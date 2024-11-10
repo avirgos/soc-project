@@ -1,0 +1,30 @@
+
+title: Security Log Deletion Detection
+id: c46517c6-75e8-4f01-a6e8-08810906e2af
+description: Detects the deletion of security logs, an action often undertaken by attackers to hide their presence.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection1:
+    EventID: 517
+    SourceName: "Security"
+  selection2:
+    EventID: 1102
+    SourceName: "Microsoft-Windows-Eventlog"
+  condition: selection1 OR selection2
+fields:
+  - _time
+  - ComputerName
+  - EventCode
+  - SourceName
+  - Account_Name
+  - host
+falsepositives:
+  - Routine security log clearing by authorized personnel or automated systems
+level: critical
+tags:
+  - attack.defense_evasion

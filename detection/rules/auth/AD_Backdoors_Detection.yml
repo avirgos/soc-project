@@ -1,0 +1,37 @@
+
+title: Detection of Active Directory Backdoors
+id: 8f097d06-cce4-48b6-8d7f-0e0f58456391
+description: Detects backdoors created in Active Directory by modifying user attributes to maintain unauthorized access.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection1:
+    EventID: 4738
+    AllowedToDelegateTo:
+      - "*"
+    AllowedToDelegateTo!:
+      - "-"
+  selection2:
+    EventID: 5136
+    Message|contains:
+      - "msDS-AllowedToDelegateTo"
+      - "user"
+      - "servicePrincipalName"
+      - "msDS-AllowedToActOnBehalfOfOtherIdentity"
+  condition: selection1 OR selection2
+fields:
+  - EventID
+  - Message
+  - AllowedToDelegateTo
+  - _time
+falsepositives:
+  - Legitimate administrative changes to Active Directory attributes
+level: high
+tags:
+  - attack.persistence
+  - attack.privilege_escalation
+  - attack.defense_evasion

@@ -1,0 +1,27 @@
+
+title: PowerShell Script Installed as Service
+id: 7c78c723-b63d-44cf-9944-2aa8c00ee3ea
+description: Detects the installation of a PowerShell script as a service, a persistence method often used by attackers.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4697
+    Service_File_Name|contains:
+      - "powershell"
+      - "pwsh"
+  condition: selection
+fields:
+  - _time
+  - EventID
+  - Service_File_Name
+falsepositives:
+  - Legitimate administrative use of PowerShell scripts as services
+level: high
+tags:
+  - attack.persistence
+  - attack.execution

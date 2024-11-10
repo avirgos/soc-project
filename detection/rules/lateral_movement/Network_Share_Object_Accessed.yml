@@ -1,0 +1,28 @@
+
+title: Low Importance - Network Share Object Accessed
+id: 7f4ed876-6134-4f0a-9655-fc593b4c794d
+description: Detects PetitPotam attack, which uses network share requests to exfiltrate information or escalate privileges.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 5140
+    Share_Name|contains: "\IPC$"
+    Account_Name: "ANONYMOUS LOGON"
+  condition: selection
+fields:
+  - EventID
+  - Share_Name
+  - Account_Name
+  - _time
+  - Importance
+falsepositives:
+  - Legitimate use of network shares by authorized applications or users
+level: low
+tags:
+  - attack.lateral_movement
+  - attack.credential_access

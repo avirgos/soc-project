@@ -1,0 +1,32 @@
+
+title: Overpass-the-Hash Attack Detection
+id: 9c9c7fd4-f29a-49e6-b26c-7e4ed01d54fa
+description: Detects attempts to compromise accounts using the overpass-the-hash technique, which allows authentication using an NTLM hash without the user's cleartext password.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4624
+    Logon_Type: 9
+    Logon_Process: "seclogo"
+    Authentication_Package: "Negotiate"
+  condition: selection
+fields:
+  - _time
+  - Account_Name
+  - ComputerName
+  - host
+  - Logon_Type
+  - Logon_Process
+  - Authentication_Package
+  - EventCode
+falsepositives:
+  - Uncommon but legitimate use cases of authentication processes
+level: high
+tags:
+  - attack.credential_access
+  - attack.lateral_movement

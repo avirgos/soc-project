@@ -1,0 +1,38 @@
+
+title: Metasploit SMB PsExec Detection
+id: 229fae8e-e15e-4abf-b360-5c0a6d8bb37c
+description: Detects the use of Metasploit or Impacket to install a service via SMB, a common lateral movement technique.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4697
+    Service_Start_Type: 3
+    Service_Type: "0x10"
+  regex_service_file:
+    Service_File_Name|startswith:
+      - "C:\Windows\"
+      - "%systemroot%\"
+    Service_File_Name|endswith: ".exe"
+    exe_name|length: 8
+  regex_service_name:
+    Service_Name|length: 4
+    Service_Name|length: 8
+    Service_Name|length: 16
+  condition: selection AND regex_service_file AND regex_service_name
+fields:
+  - ComputerName
+  - subject
+  - user
+  - service_name
+  - Service_File_Name
+falsepositives:
+  - Legitimate software installation and service creation by administrators
+level: high
+tags:
+  - attack.lateral_movement
+  - attack.execution

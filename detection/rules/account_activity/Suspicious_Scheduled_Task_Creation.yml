@@ -1,0 +1,57 @@
+
+title: Suspicious Scheduled Task Creation
+id: 35ab22c8-c524-4bd0-b7ca-e534f55dd86f
+description: Detects the creation of suspicious scheduled tasks, often used to maintain persistence.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4698
+    Task_Content|contains:
+      - "\AppData\Local\Temp\"
+      - "\AppData\Roaming\"
+      - "\Users\Public\"
+      - "\WINDOWS\Temp\"
+      - "C:\Temp\"
+      - "\Desktop\"
+      - "\Downloads\"
+      - "\Temporary Internet"
+      - "C:\ProgramData\"
+      - "C:\Perflogs\"
+      - "regsvr32"
+      - "rundll32"
+      - "cmd.exe</Command>"
+      - "cmd</Command>"
+      - "<Arguments>/c "
+      - "<Arguments>/k "
+      - "<Arguments>/r "
+      - "powershell"
+      - "pwsh"
+      - "mshta"
+      - "wscript"
+      - "cscript"
+      - "certutil"
+      - "bitsadmin"
+      - "bash.exe"
+      - "bash "
+      - "scrcons"
+      - "wmic "
+      - "wmic.exe"
+      - "forfiles"
+      - "scriptrunner"
+      - "hh.exe"
+  condition: selection
+fields:
+  - EventID
+  - Task_Content
+  - _time
+falsepositives:
+  - Legitimate scheduled tasks created by administrators or authorized software
+level: high
+tags:
+  - attack.persistence
+  - attack.execution

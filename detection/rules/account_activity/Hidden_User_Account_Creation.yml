@@ -1,0 +1,29 @@
+
+title: Hidden User Account Creation
+id: ebd5c4c1-a9ae-4ace-ad2d-02090869c373
+description: Detects the creation of hidden accounts, often used to maintain unauthorized access on a system.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4720
+    Account_Name|endswith: "$"
+  exclusion:
+    Account_Name: "HomeGroupUser$"
+  condition: selection AND NOT exclusion
+fields:
+  - EventID
+  - Account_Name
+  - _time
+  - ComputerName
+  - subject
+falsepositives:
+  - Legitimate service accounts that end with a dollar sign
+level: high
+tags:
+  - attack.persistence
+  - attack.privilege_escalation

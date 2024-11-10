@@ -1,0 +1,31 @@
+
+title: System Log Deletion Detection
+id: 54de6361-4285-4bf5-b0d5-b4dc95b610de
+description: Detects the deletion of system logs, an action often used to cover traces of malicious activity.
+status: experimental
+author: Rayane Bendahmane (@rbendah)
+date: 2024-11-10
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    EventID: 104
+    SourceName|contains:
+      - "Microsoft-Windows-PowerShell/Operational"
+      - "Microsoft-Windows-Sysmon/Operational"
+      - "PowerShellCore/Operational"
+      - "Security"
+      - "System"
+      - "Windows PowerShell"
+  condition: selection
+fields:
+  - _time
+  - SourceName
+  - EventCode
+  - Message
+falsepositives:
+  - Legitimate log clearing by administrators or scheduled maintenance tasks
+level: high
+tags:
+  - attack.defense_evasion
