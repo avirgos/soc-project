@@ -1,0 +1,33 @@
+title: OpenVPN Privilege Escalation Attempt
+id: f45b2dbd-e432-4e1f-9077-6ef23dc9b69e
+description: Detects the execution of OpenVPN with elevated privileges using specific parameters (--dev, --script-security, --up, or sudo), indicating a potential privilege escalation attempt.
+status: experimental
+author: Ayet Merzouqi
+date: "2024-11-9"
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image: '*openvpn*'
+  filter:
+    CommandLine|contains:
+      - '--dev'
+      - '--script-security'
+      - '--up'
+      - 'sudo'
+  condition: selection and filter
+fields:
+  - _time
+  - User
+  - ComputerName
+  - CommandLine
+  - ProcessId
+  - ParentImage
+falsepositives:
+  - Legitimate use of OpenVPN with elevated privileges in administrative or diagnostic scenarios.
+level: high
+tags:
+  - attack.t1548.003
+  - attack.t1548

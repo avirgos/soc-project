@@ -1,0 +1,32 @@
+title: Rundll32 Execution with Anomalous Parent Process
+id: fb91211a-22c4-48b7-a89b-308cfbbfbb17
+description: Detects the execution of `rundll32.exe` with parent processes outside of typical locations, such as AppData or Microsoft Edge directories, which may indicate suspicious activity.
+status: experimental
+author: Ayet Merzouqi
+date: 2024/11/05
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    CommandLine|contains: ["rundll32.exe", "rundll32"]
+  filter:
+    ParentImage:
+      - '*\\AppData\\Local\\*'
+      - '*\\Microsoft\\Edge\\*'
+  condition: selection and not filter
+fields:
+  - _time
+  - User
+  - ComputerName
+  - CommandLine
+  - ProcessId
+  - ParentImage
+falsepositives:
+  - Legitimate software using rundll32 in non-standard ways
+level: high
+tags:
+  - attack.execution
+  - attack.t1059.001
+  - attack.t1105
