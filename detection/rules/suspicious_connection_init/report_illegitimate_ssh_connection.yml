@@ -1,0 +1,29 @@
+title: SSH Server Listening Detected from Suspicious Source
+id: a12b3c45-d678-ef90-gh12-34ij56kl789n
+description: Detects when the SSH server (sshd) process starts listening, excluding known internal IP ranges.
+author: Philemon St Jean
+date: 2024/11/10
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    EventID: 4
+    process: "sshd"
+    payload|contains: "Server listening on"
+  filter:
+    src_ip|startswith:
+      - "192.168.10."
+      - "10.100.0."
+      - "192.168.20."
+  condition: selection AND NOT filter
+fields:
+  - EventID
+  - process
+  - payload
+  - src_ip
+level: medium
+tags:
+  - attack.persistence
+  - attack.T1043
+  - attack.network
