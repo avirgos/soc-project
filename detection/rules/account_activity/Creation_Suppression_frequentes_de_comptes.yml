@@ -18,7 +18,7 @@ detection:
       - "192.168.10.22"
       - "192.168.10.23"
   condition: selection
-  timeframe: 1h  # Exemple de délai d'agrégation
+  timeframe: 1h
   aggregation:
     - Account_Name
   count: 3

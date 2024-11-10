@@ -1,6 +1,6 @@
-title: Special Logon Event Detection
-id: b09a02fb-d2a1-4b0e-8fa2-7a9a9a1b7c51
-description: Detects logon events where an account with special privileges logs in on Windows systems (Event ID 4672).
+title: Privileged Logon from Specific IPs for Selected Accounts
+id: 4b8c6f34-7d1a-4d8c-98a1-3e5f8c7d8a7b
+description: Detects special logon events (Event ID 4672) from specific IP addresses for specified accounts with elevated privileges.
 status: experimental
 author: smakalou
 date: 2024-10-23
@@ -15,12 +15,27 @@ detection:
       - "192.168.10.21"
       - "192.168.10.22"
       - "192.168.10.23"
+    Account_Name:
+      - "Zane"
+      - "Ethan"
+      - "Scott"
+      - "Willa"
+      - "Victor"
+      - "Lee"
+      - "Taylor"
+      - "Samuel"
+      - "Noah"
   condition: selection
 fields:
   - EventID
   - Account_Name
-  - ComputerName
   - Privileges
+  - ComputerName
+  - src_ip
+  - _time
 falsepositives:
-  - Administrative actions by legitimate users
-level: medium
+  - Authorized access by trusted accounts during administrative tasks
+level: high
+tags:
+  - attack.privilege_escalation
+  - attack.persistence
