@@ -1,0 +1,24 @@
+title: Detection of Addinutil.exe Execution
+id: 6e93f123-0fcb-4c53-9a6f-a9bc237fe56d
+description: Detects the initiation of the Addinutil.exe process, which may indicate suspicious activity.
+author: Philemon St Jean
+date: 2024/11/10
+logsource:
+  category: process_creation
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    Channel: "Microsoft-Windows-Sysmon/Operational"
+    Initiated: "true"
+    Image|contains: "\\addinutil.exe"
+  condition: selection
+fields:
+  - EventID
+  - Image
+  - Initiated
+level: medium
+tags:
+  - attack.execution
+  - attack.T1218
+  - attack.T1218.009
