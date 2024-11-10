@@ -5,9 +5,6 @@ description: Detects the creation of executable (.exe) files in sensitive direct
 author: Antoine Virgos (@avirgos)
 date: 2024-11-02
 tags:
-  - attack.execution
-  - attack.persistence
-  - attack.malicious_file
   - attack.T1203              # Exploitation of client-side applications
   - attack.T1059              # Command-Line Interface usage for executing commands
 logsource:

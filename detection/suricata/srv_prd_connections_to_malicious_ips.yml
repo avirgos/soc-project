@@ -5,10 +5,6 @@ description: Detects connections made by SRV-PRD-... (-DC, -WEB, -DB, -SHARE) to
 author: Antoine Virgos (@avirgos)
 date: 2024-10-26
 tags:
-  - attack.initial_access
-  - attack.exfiltration
-  - attack.persistence
-  - attack.C2
   - attack.T1071.001        # Web Protocols
   - attack.T1071.004        # DNS
   - attack.T1071            # General C2 communication techniques

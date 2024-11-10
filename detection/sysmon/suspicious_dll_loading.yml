@@ -5,7 +5,6 @@ description:  Detects cases where the same process loads more than 3 ".dll" file
 author: Antoine Virgos (@avirgos)
 date: 2024-11-09
 tags:
-  - attack.execution
   - attack.t1055        # Process Injection
 logsource:
   product: windows

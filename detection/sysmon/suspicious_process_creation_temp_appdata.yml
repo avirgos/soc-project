@@ -5,8 +5,6 @@ description: Detects process creation in temporary directories : Temp or AppData
 author: Antoine Virgos (@avirgos)
 date: 2024-11-02
 tags:
-  - attack.execution
-  - attack.tactic.execution
   - mitre.technique.T1059         # Command-Line Interface usage for executing commands
   - mitre.technique.T1203         # Exploitation of client-side applications
 logsource:
