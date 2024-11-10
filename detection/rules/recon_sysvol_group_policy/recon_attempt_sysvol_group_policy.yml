@@ -1,0 +1,47 @@
+title: Access to Sensitive SYSVOL Files
+id: fcb5dbe7-b218-4a32-bf6e-4bf0c8eab414
+description: Detection of access to specific sensitive files within SYSVOL directory that may indicate potential unauthorized access.
+author: Philemon ST JEAN
+date: 2023/11/10
+logsource:
+  category: file_access
+  product: windows
+detection:
+  selection:
+    EventID: 4663
+    FileName|contains:
+      - "\\sysvol\\"
+      - "\\Policies\\"
+    TargetFileName|endswith:
+      - "audit.csv"
+      - "Files.xml"
+      - "GptTmpl.inf"
+      - "groups.xml"
+      - "Registry.pol"
+      - "Registry.xml"
+      - "scheduledtasks.xml"
+      - "scripts.ini"
+      - "services.xml"
+    SourceImage|contains: 
+      - "WinEventLog"
+    source:
+      - WinEventLog:*
+  exclusion:
+    ProcessName|contains:
+      - "C:\\Program Files (x86)\\"
+      - "C:\\Program Files\\"
+      - "C:\\Windows\\system32\\"
+      - "C:\\Windows\\SysWOW64\\"
+      - "C:\\Windows\\explorer.exe"
+  condition: selection AND NOT exclusion
+fields:
+  - EventID
+  - FileName
+  - TargetFileName
+  - SourceImage
+level: high
+tags:
+  - attack.persistence
+  - attack.T1003
+  - attack.T1074
+  - attack.T1003.008
