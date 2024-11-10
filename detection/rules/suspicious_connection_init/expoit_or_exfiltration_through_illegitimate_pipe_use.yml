@@ -1,7 +1,7 @@
 title: Suspicious Access to Microsoft SQL Server Named Pipe
 id: c0bff9aa-6749-4d1c-bf4a-345d98a8b4a1
 description: Detects access to a specific named pipe associated with Microsoft SQL Server (\\MICROSOFT##WID\\tsql\\query) by potentially unauthorized processes.
-author: Philemon St Jean
+author: Philemon St-Jean
 date: 2024/11/10
 logsource:
   category: pipe_access

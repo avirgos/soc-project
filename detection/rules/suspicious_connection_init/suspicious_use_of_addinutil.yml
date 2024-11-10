@@ -1,7 +1,7 @@
 title: Execution of Addinutil.exe
 id: 1a23bc45-d67e-89f0-gh12-34ij56kl789m
 description: Detects the execution of addinutil.exe, which may indicate suspicious or unauthorized activity.
-author: Philemon St Jean
+author: Philemon St-Jean
 date: 2024/11/10
 logsource:
   category: process_creation

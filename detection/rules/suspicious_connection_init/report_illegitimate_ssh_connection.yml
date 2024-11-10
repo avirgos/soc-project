@@ -1,7 +1,7 @@
 title: SSH Server Listening Detected from Suspicious Source
 id: a12b3c45-d678-ef90-gh12-34ij56kl789n
 description: Detects when the SSH server (sshd) process starts listening, excluding known internal IP ranges.
-author: Philemon St Jean
+author: Philemon St-Jean
 date: 2024/11/10
 logsource:
   category: process_creation
