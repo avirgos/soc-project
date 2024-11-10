@@ -9,7 +9,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**⚠️ Dans le script Python ```splunk_alert_report.py```, vous devez compléter la valeur `<username>` et `<password>` avec vos identifiants Splunk pour pouvoir se connecter à l'instance. ⚠️**
+**⚠️ Dans le script Python ```splunk_alert_report.py```, vous devez compléter la valeur de la variable `SPLUNK_USERNAME` et `SPLUNK_PASSWORD` avec vos identifiants Splunk pour pouvoir se connecter à l'instance. Pour l'envoi de mails depuis Gmail, il faut compléter la valeur de la variable `SENDER_PASSWORD`. ⚠️**
 
 ## Utilisation
 
@@ -23,4 +23,4 @@ Ce script est en charge de se connecter à l'instance Splunk et de récupérer t
 
 Puis, le script Python réalise un tri pour n'obtenir que celles datant d'aujourd'hui.
 
-Au final, on obtient ces alertes au format Markdown dans un template Jinja.
+Au final, on obtient ces alertes au format Markdown dans un template Jinja et celles-ci sont envoyées par mail aux destinataires indiqués dans la variable `RECIPIENT_EMAILS`.

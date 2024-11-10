@@ -3,14 +3,34 @@ import json
 from jinja2 import Environment
 from datetime import datetime
 import os
+import smtplib
+from email.mime.text import MIMEText
+
+# Email configuration
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 465
+SENDER_EMAIL = "splunksoc.insacvl@gmail.com"
+SENDER_PASSWORD = "<gmail-app-password>"
+RECIPIENT_EMAILS = [
+    "virodan4@gmail.com",           # Antoine VIRGOS
+    "linkdine08@gmail.com",         # Ayet MERZOUQI
+    "rayanebe570@gmail.com"         # Rayane BENDAHMANE
+]
+
+# Splunk configuration
+SPLUNK_HOST = "172.10.80.212"
+SPLUNK_PORT = "8089"
+SPLUNK_SCHEME = "https"
+SPLUNK_USERNAME = "<username>"
+SPLUNK_PASSWORD = "<password>"
 
 # connect to Splunk instance
 service = client.connect(
-    host='172.10.80.212',
-    port='8089',
-    scheme='https',
-    username='<username>',
-    password='<password>'
+    host=SPLUNK_HOST,
+    port=SPLUNK_PORT,
+    scheme=SPLUNK_SCHEME,
+    username=SPLUNK_USERNAME,
+    password=SPLUNK_PASSWORD
 )
 
 # Splunk search query to retrieve only "High" severity alerts
@@ -19,6 +39,20 @@ search_query = 'search index="alerts" event.event_title="*" event.impact="high"'
 # convert ISO timestamp to formatted datetime
 def to_datetime(timestamp):
     return datetime.fromisoformat(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+
+def send_email(subject, body):
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = ', '.join(RECIPIENT_EMAILS)
+
+    try:
+        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as smtp_server:
+            smtp_server.login(SENDER_EMAIL, SENDER_PASSWORD)
+            smtp_server.sendmail(SENDER_EMAIL, RECIPIENT_EMAILS, msg.as_string())
+        print("Email sent successfully")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
 
 try:
     # send the search query to Splunk
@@ -55,7 +89,7 @@ Horodatage : {{ result['_time'] | to_datetime }}
 
     # process results
     filtered_results = []
-    today_date = datetime.now().strftime('%Y-%m-%d')
+    today_date = datetime.now().date()
 
     for result in jsout['results']:
         raw_data = json.loads(result['_raw'])
@@ -63,19 +97,28 @@ Horodatage : {{ result['_time'] | to_datetime }}
         # description of an alert
         result['originQuery'] = raw_data['event']['originQuery']['description']
 
-        # convert "_time" to datetime object for filtering
-        event_time = datetime.fromisoformat(result['_time'].replace('Z', '+00:00'))
-        
-        # retrieve Splunk alerts from today
-        if event_time.date() == today_date:
+        # convert the _time field to a datetime object
+        alert_time = datetime.strptime(result['_time'], '%Y-%m-%dT%H:%M:%S.%f%z').date()
+
+        # check if the alert is from today
+        if alert_time == today_date:
             filtered_results.append(result)
 
     # create a model from the string template
     jinja_template = env.from_string(template)
     
     # render the template with the results
-    print(jinja_template.render(results=filtered_results))
+    rendered_alerts = jinja_template.render(results=filtered_results)
+
+    # send email if there are alerts
+    if filtered_results:
+        email_subject = f"Alertes Splunk de sévérité élevée - {today_date}"
+
+        send_email(email_subject, rendered_alerts)
+        print("Email sent with alerts.")
+    else:
+        print("No high severity alerts for today. No email sent.")
 except Exception as e:
-    print(f"⚠️ An error occurred : {e}")
+    print(f"⚠️  An error occurred : {e}")
 finally:
     service.logout()
